@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 const Reminder = ({ data }) => {
-  const book = data.filter((book) => book.progress < 70 && book.progress > 0);
+  const book = data.filter((book) => book.progress < 70 && book.progress >= 0);
   const chosenBook = book[Math.floor(Math.random() * book.length)];
   return (
     <div className="flex bg-ground-light gap-5 p-6 rounded-xl w-[25%]">

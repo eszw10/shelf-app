@@ -1,8 +1,11 @@
 import PropTypes from "prop-types";
 
-const Book = ({ data }) => {
+const Book = ({ data, handleClick }) => {
   return (
-    <div className="font-playfair flex flex-col gap-3">
+    <div
+      className="font-playfair flex flex-col gap-3 cursor-pointer"
+      onClick={() => handleClick(data.id)}
+    >
       <img src={data.image} className="h-52 w-40" alt={data.title} />
       <p className="w-40">{data.title}</p>
       <p className="text-xs text-gray-400">{data.author}</p>
@@ -20,6 +23,7 @@ const Book = ({ data }) => {
 
 Book.propTypes = {
   data: PropTypes.object,
+  handleClick: PropTypes.func,
 };
 
 export default Book;

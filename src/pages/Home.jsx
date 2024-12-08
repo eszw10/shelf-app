@@ -1,6 +1,5 @@
 import QuotesBox from "../components/QuotesBox";
-import SearchBar from "../components/SearcBar";
-import { books } from "../booklist";
+import books from "../booklist";
 import Book from "../components/Book";
 import Statistic from "../components/Statistic";
 import { CircleUserRound, Mail } from "lucide-react";
@@ -17,36 +16,33 @@ const Home = () => {
       id: 1,
       title: "Total Books",
       value: books.length,
-      color: "red",
     },
     {
       id: 2,
       title: "Author",
       value: uniqueAuthor,
-      color: "yellow",
     },
     {
       id: 3,
       title: "Books Read",
       value: onGoing,
-      color: "blue",
     },
   ];
   return (
-    <div className="px-9 pt-4 pb-10 flex flex-col gap-7 w-full bg-slate-100">
-      <div className="flex justify-between">
-        <SearchBar />
+    <div className="pb-10 flex flex-col gap-7 w-full bg-slate-100">
+      <div className="flex justify-between bg-white px-9 py-4">
+        <h1 className="text-3xl font-bold text-main">Shelf.</h1>
         <div className="flex items-center gap-3">
           <CircleUserRound className="text-gray-400" size={30} />
           <p>Hafizh S.</p>
         </div>
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex mx-9 justify-between items-center">
         <QuotesBox />
         <Reminder data={books} />
       </div>
-      <p className="text-gray-400 text-xl">Continue Reading</p>
-      <div className="flex justify-between">
+      <p className="text-gray-400 text-xl mx-9">Continue Reading</p>
+      <div className="flex justify-between mx-9">
         <div className="flex justify-between w-[60%]">
           {books
             .filter((book) => book.id < 5)
@@ -56,7 +52,7 @@ const Home = () => {
         </div>
         <Community />
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between mx-9">
         <div className="mt-10 flex items-center justify-evenly w-[60%]">
           {statistics.map((statistic) => (
             <Statistic key={statistic.id} data={statistic} />
