@@ -8,7 +8,10 @@ const Book = ({ data }) => {
       <p className="text-xs text-gray-400">{data.author}</p>
       <div className="mt-auto w-full h-1 bg-slate-400 rounded-sm">
         {data.progress > 0 && (
-          <div className={`h-1 bg-main w-[${data.progress}%] rounded-sm`}></div>
+          <div
+            style={{ width: `${data.progress}%` }}
+            className={`h-1 bg-main rounded-sm`}
+          ></div>
         )}
       </div>
     </div>

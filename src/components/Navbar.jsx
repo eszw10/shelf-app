@@ -16,17 +16,13 @@ const Navbar = () => {
       <main className="flex flex-col justify-center items-center gap-5 w-full h-full">
         <NavLink
           to="/"
-          className={({ isActive }) =>
-            isActive ? "bg-red-200 w-full my-0 flex justify-center py-2" : ""
-          }
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
           <Home className="text-white cursor-pointer" strokeWidth={1} />
         </NavLink>
         <NavLink
           to="/books"
-          className={({ isActive }) =>
-            isActive ? "bg-red-200 w-full my-0 flex justify-center py-2" : ""
-          }
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
           <LayoutDashboard
             className="text-white cursor-pointer"
@@ -35,17 +31,13 @@ const Navbar = () => {
         </NavLink>
         <NavLink
           to="/add"
-          className={({ isActive }) =>
-            isActive ? "bg-red-200 w-full my-0 flex justify-center py-2" : ""
-          }
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
           <CopyPlus className="text-white cursor-pointer" strokeWidth={1} />
         </NavLink>
         <NavLink
           to="/about"
-          className={({ isActive }) =>
-            isActive ? "bg-red-200 w-full my-0 flex justify-center py-2" : ""
-          }
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
           <CircleHelp className="text-white cursor-pointer" strokeWidth={1} />
         </NavLink>
