@@ -4,8 +4,8 @@ const Features = () => {
   return (
     <div className="flex flex-col gap-14">
       <h1 className="text-4xl font-bold text-main text-center">Features</h1>
-      <div className="flex gap-10 justify-center">
-        <div className="flex flex-col gap-2 w-96">
+      <div className="flex gap-7 2xl:gap-10 justify-center">
+        <div className="flex flex-col gap-2 w-80 2xl:w-96">
           <NotebookPen className="text-main" size={40} />
           <h3 className="mt-1 font-bold text-lg">Manage Books</h3>
           <p className="text-gray-500 text-justify">

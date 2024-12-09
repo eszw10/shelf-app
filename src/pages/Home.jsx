@@ -5,6 +5,7 @@ import Statistic from "../components/Statistic";
 import { CircleUserRound, Mail } from "lucide-react";
 import Reminder from "../components/Reminder";
 import Community from "../components/Community";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const uniqueAuthor = [...new Set(books.map((book) => book.author))].length;
@@ -58,10 +59,13 @@ const Home = () => {
             <Statistic key={statistic.id} data={statistic} />
           ))}
         </div>
-        <div className="flex mt-auto gap-3 bg-main text-white py-4 px-6 rounded-xl cursor-pointer shadow ">
+        <Link
+          className="flex mt-auto gap-3 bg-main text-white py-4 px-6 rounded-xl cursor-pointer shadow "
+          to={"/about"}
+        >
           <p className="font-bold">Contact Us</p>
           <Mail />
-        </div>
+        </Link>
       </div>
     </div>
   );

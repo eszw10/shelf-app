@@ -2,7 +2,7 @@ import Logo from "../../images/logo fix.png";
 
 const Shelf = () => {
   return (
-    <div className="flex gap-10  max-w-[70%]">
+    <div className="flex gap-10 max-w-[85%] desktop:max-w-[70%]">
       <img src={Logo} alt="shelf-logo" className="h-72 rounded-xl shadow-md" />
       <div className="flex flex-col gap-5 text-lg">
         <h1 className="text-6xl font-bold">
