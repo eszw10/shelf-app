@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 
 const Filter = ({ data, handleClick }) => {
+  console.log(typeof data.value);
+
   return (
     <button
       className={`${

@@ -1,10 +1,13 @@
 import Book from "../components/Book";
-import booksArr from "../booklist";
 import Filter from "../components/Filter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Detail from "../components/Detail";
 import SearchBar from "../components/SearcBar";
 const Library = () => {
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [activeBook, setActiveBook] = useState(null);
   const [filters, setFilters] = useState([
     {
       id: 1,
@@ -43,37 +46,57 @@ const Library = () => {
     },
   ]);
 
-  const [books, setBooks] = useState(booksArr);
-  const [activeBook, setActiveBook] = useState(null);
+  const fetchBooks = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/books");
+      const data = await response.json();
+      setBooks(data);
+      setFilteredBooks(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
 
   const handleFilter = (value) => {
     const filtered =
-      value === "All"
-        ? booksArr
-        : booksArr.filter((book) => book.category === value);
-    setBooks(filtered);
+      value == "All"
+        ? books
+        : books.filter(
+            (book) => book.category.toLowerCase() == value.toLowerCase()
+          );
     setFilters((filters) =>
-      filters.map((filter) => {
-        if (filter.value === value) {
-          return { ...filter, isActive: true };
-        }
-        return { ...filter, isActive: false };
-      })
+      filters.map((filter) => ({
+        ...filter,
+        isActive: filter.value === value,
+      }))
     );
+    setFilteredBooks(filtered);
   };
 
   const handleSearch = (word) => {
-    setBooks(booksArr.filter((book) => book.title.includes(word)));
+    if (!word) {
+      setFilteredBooks(books); // Reset to all books if no search term
+    } else {
+      const filtered = books.filter((book) =>
+        book.title.toLowerCase().includes(word.toLowerCase())
+      );
+      setFilteredBooks(filtered); // Set books based on search term
+    }
   };
 
   const handleActiveBook = (id) => {
     if (activeBook === id) {
       setActiveBook(null);
     }
-    setActiveBook(id);
+    setActiveBook(id - 1);
   };
-
-  console.log(activeBook);
 
   return (
     <div
@@ -85,37 +108,47 @@ const Library = () => {
         <SearchBar handleSearch={handleSearch} />
         <div className="bg-white shadow-lg flex flex-col gap-5 p-7 rounded-xl">
           <h3 className="font-bold text-2xl">Categories</h3>
-          <div className="flex items-center gap-2">
-            {filters.map((filter) => (
-              <Filter
-                key={filter.id}
-                data={filter}
-                handleClick={handleFilter}
-              />
-            ))}
-          </div>
-          {books.length > 0 ? (
-            <div
-              className={`grid ${
-                activeBook !== null ? "grid-cols-4" : "grid-cols-5"
-              } gap-7`}
-            >
-              {books.map((book) => (
-                <Book
-                  key={book.id}
-                  data={book}
-                  handleClick={handleActiveBook}
-                />
-              ))}
+          {loading ? (
+            <div className="flex justify-center items-center w-[30%]">
+              <div className="w-16 h-16 border-4 border-t-4 border-gray-300 rounded-full animate-spin border-t-main"></div>
             </div>
           ) : (
-            <div className="flex justify-center items-center h-full">
-              you have no book with this category.
-            </div>
+            <>
+              <div className="flex items-center gap-2">
+                {filters.map((filter) => (
+                  <Filter
+                    key={filter.id}
+                    data={filter}
+                    handleClick={handleFilter}
+                  />
+                ))}
+              </div>
+              {filteredBooks.length > 0 ? (
+                <div
+                  className={`grid ${
+                    activeBook !== null ? "grid-cols-4" : "grid-cols-5"
+                  } gap-7`}
+                >
+                  {filteredBooks.map((book) => (
+                    <Book
+                      key={book.id}
+                      data={book}
+                      handleClick={handleActiveBook}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex justify-center items-center h-full">
+                  you have no book with this category.
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
-      {activeBook !== null && <Detail data={books[activeBook]} />}
+      {activeBook !== null && (
+        <Detail data={books[activeBook]} isLoading={loading} />
+      )}
     </div>
   );
 };

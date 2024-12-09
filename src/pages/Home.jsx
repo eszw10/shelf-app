@@ -1,15 +1,18 @@
 import QuotesBox from "../components/QuotesBox";
-import books from "../booklist";
+// import books from "../booklist";
 import Book from "../components/Book";
 import Statistic from "../components/Statistic";
 import { CircleUserRound, Mail } from "lucide-react";
 import Reminder from "../components/Reminder";
 import Community from "../components/Community";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Home = () => {
-  const uniqueAuthor = [...new Set(books.map((book) => book.author))].length;
-  const onGoing = books.filter(
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const uniqueAuthor = [...new Set(books?.map((book) => book.author))].length;
+  const onGoing = books?.filter(
     (book) => book.progress < 100 && book.progress > 0
   ).length;
   const statistics = [
@@ -29,6 +32,25 @@ const Home = () => {
       value: onGoing,
     },
   ];
+
+  const fetchBooks = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/books");
+      const data = await response.json();
+      setBooks(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
+  console.log(books);
+
   return (
     <div className="pb-10 flex flex-col gap-7 w-full bg-slate-100">
       <div className="flex justify-between bg-white px-9 py-4">
@@ -40,16 +62,26 @@ const Home = () => {
       </div>
       <div className="flex mx-9 justify-between items-center">
         <QuotesBox />
-        <Reminder data={books} />
+        {loading ? (
+          <div className="flex justify-center items-center w-[30%]">
+            <div className="w-16 h-16 border-4 border-t-4 border-gray-300 rounded-full animate-spin border-t-main"></div>
+          </div>
+        ) : (
+          <Reminder data={books} />
+        )}
       </div>
       <p className="text-gray-400 text-xl mx-9">Continue Reading</p>
       <div className="flex justify-between mx-9">
         <div className="flex justify-between w-[60%]">
-          {books
-            .filter((book) => book.id < 5)
-            .map((book) => (
-              <Book key={book.id} data={book} />
-            ))}
+          {loading ? (
+            <div className="w-full flex justify-center items-center">
+              <div className="w-16 h-16 border-4 border-t-4 border-gray-300 rounded-full animate-spin border-t-main"></div>
+            </div>
+          ) : (
+            books
+              .filter((book) => book.id < 5)
+              .map((book) => <Book key={book.id} data={book} />)
+          )}
         </div>
         <Community />
       </div>
