@@ -1,46 +1,40 @@
 import { useState } from "react";
-import books from "../booklist";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const AddBook = () => {
+  const navigate = useNavigate();
   const [book, setBook] = useState({
-    id: books.length + 1,
     title: "",
     author: "",
-    progress: 0,
-    isRead: false,
-    image: null,
+    image: "",
     category: "",
+    progress: 0,
   });
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      const previewURL = URL.createObjectURL(file);
-      setPreview(previewURL);
-    }
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const file = e.target.files[0];
-    if (name == "image") {
-      if (file) {
-        setImage(file);
-        const previewURL = URL.createObjectURL(file);
-        setPreview(previewURL);
-      }
-    }
     setBook((book) => ({
       ...book,
-      [name]: name == "image" ? image : value,
+      [name]: value,
     }));
   };
 
-  const formData = new FormData();
-  formData.append("image", image);
+  const handleSubmit = async () => {
+    const response = await fetch("http://localhost:8080/books", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([book]),
+    });
+
+    if (response.ok) {
+      toast.success("Book added successfully");
+      navigate("/books");
+    } else {
+      toast.error("Failed to add book");
+    }
+  };
 
   return (
     <div className="bg-slate-100 flex justify-center items-center w-full">
@@ -83,13 +77,14 @@ const AddBook = () => {
               value={book.progress}
               required
               onChange={handleChange}
+              min="0"
+              max="100"
             />
           </div>
           <div className="flex flex-col gap-2">
             <p className="font-semibold">Category : </p>
             <select
               name="category"
-              id=""
               className="border border-gray-300 rounded-xl outline-main p-2"
               value={book.category}
               onChange={handleChange}
@@ -103,94 +98,33 @@ const AddBook = () => {
             </select>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="font-semibold">Image :</p>
+            <p className="font-semibold">Image URL :</p>
             <input
-              type="file"
-              accept="image/*"
-              name=""
-              id=""
-              onChange={handleImageChange}
-              value={image}
+              type="text"
+              placeholder="Image URL..."
+              onChange={handleChange}
+              className="outline-main p-2 border border-gray-300 rounded-xl"
+              value={book.image}
+              name="image"
             />
           </div>
-          {preview && (
+          {book.image !== "" && (
             <div className="flex gap-2">
-              <div className="">Image Preview :</div>
-              <img src={preview} alt="image-preview" className="h-14" />
+              <div className="font-semibold">Image Preview :</div>
+              <img src={book.image} alt="image-preview" className="h-14" />
             </div>
           )}
         </form>
-        <button className="bg-main text-white p-2 rounded-xl">Submit</button>
+        <button
+          className="bg-main text-white p-2 rounded-xl"
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
+        <Toaster />
       </div>
     </div>
   );
 };
 
 export default AddBook;
-// upload image and using hot toast
-// import React, { useState } from 'react';
-// import toast, { Toaster } from 'react-hot-toast';
-
-// const ImageUpload = () => {
-//   const [image, setImage] = useState(null);
-//   const [preview, setPreview] = useState(null);
-
-//   // Handle the image file change
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       setImage(file);
-//       const previewURL = URL.createObjectURL(file);
-//       setPreview(previewURL);
-//     }
-//   };
-
-//   // Handle image upload
-//   const handleUpload = async () => {
-//     if (!image) {
-//       toast.error('Please select an image first!');
-//       return;
-//     }
-
-//     const formData = new FormData();
-//     formData.append('image', image);
-
-//     try {
-//       const response = await fetch('http://your-backend-api.com/upload', {
-//         method: 'POST',
-//         body: formData,
-//       });
-
-//       if (response.ok) {
-//         const data = await response.json();
-//         toast.success(`Upload successful: ${data.message}`);
-//       } else {
-//         toast.error('Upload failed. Please try again.');
-//       }
-//     } catch (error) {
-//       toast.error('Error occurred during upload.');
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <input type="file" accept="image/*" onChange={handleImageChange} />
-
-//       {preview && (
-//         <div>
-//           <h3>Image Preview:</h3>
-//           <img src={preview} alt="Preview" style={{ width: '200px', height: 'auto' }} />
-//         </div>
-//       )}
-
-//       {image && (
-//         <button onClick={handleUpload}>Upload Image</button>
-//       )}
-
-//       {/* Toaster: Add this to your component tree */}
-//       <Toaster />
-//     </div>
-//   );
-// };
-
-// export default ImageUpload;

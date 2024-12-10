@@ -74,7 +74,7 @@ const Library = () => {
     setFilters((filters) =>
       filters.map((filter) => ({
         ...filter,
-        isActive: filter.value === value,
+        isActive: filter.value.toLowerCase() === value.toLowerCase(),
       }))
     );
     setFilteredBooks(filtered);
@@ -82,21 +82,20 @@ const Library = () => {
 
   const handleSearch = (word) => {
     if (!word) {
-      setFilteredBooks(books); // Reset to all books if no search term
+      setFilteredBooks(books);
     } else {
       const filtered = books.filter((book) =>
         book.title.toLowerCase().includes(word.toLowerCase())
       );
-      setFilteredBooks(filtered); // Set books based on search term
+      setFilteredBooks(filtered);
     }
   };
 
   const handleActiveBook = (id) => {
-    if (activeBook === id) {
-      setActiveBook(null);
-    }
-    setActiveBook(id - 1);
+    setActiveBook((prevActiveBook) => (prevActiveBook === id ? null : id));
   };
+
+  const activeBookData = books.find((book) => book.id === activeBook);
 
   return (
     <div
@@ -104,9 +103,9 @@ const Library = () => {
         activeBook !== null ? "pl-7" : "px-7"
       } flex w-full gap-16`}
     >
-      <div className="flex flex-col gap-7 w-full mt-10">
+      <div className="flex flex-col gap-7 w-full my-10">
         <SearchBar handleSearch={handleSearch} />
-        <div className="bg-white shadow-lg flex flex-col gap-5 p-7 rounded-xl">
+        <div className="bg-white shadow-lg flex flex-col gap-5 p-7 rounded-xl h-full">
           <h3 className="font-bold text-2xl">Categories</h3>
           {loading ? (
             <div className="flex justify-center items-center w-[30%]">
@@ -147,7 +146,7 @@ const Library = () => {
         </div>
       </div>
       {activeBook !== null && (
-        <Detail data={books[activeBook]} isLoading={loading} />
+        <Detail data={activeBookData} isLoading={loading} />
       )}
     </div>
   );

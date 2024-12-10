@@ -66,9 +66,11 @@ const Home = () => {
           <div className="flex justify-center items-center w-[30%]">
             <div className="w-16 h-16 border-4 border-t-4 border-gray-300 rounded-full animate-spin border-t-main"></div>
           </div>
-        ) : (
+        ) : books && books.length === 0 ? (
+          <div>You have no book.</div>
+        ) : books && books.length > 0 ? (
           <Reminder data={books} />
-        )}
+        ) : null}
       </div>
       <p className="text-gray-400 text-xl mx-9">Continue Reading</p>
       <div className="flex justify-between mx-9">
@@ -77,10 +79,10 @@ const Home = () => {
             <div className="w-full flex justify-center items-center">
               <div className="w-16 h-16 border-4 border-t-4 border-gray-300 rounded-full animate-spin border-t-main"></div>
             </div>
+          ) : books.length === 0 ? (
+            <div>You have no book.</div>
           ) : (
-            books
-              .filter((book) => book.id < 5)
-              .map((book) => <Book key={book.id} data={book} />)
+            books.slice(0, 4).map((book) => <Book key={book.id} data={book} />) // Use .slice() to get the first 5 books
           )}
         </div>
         <Community />
