@@ -42,7 +42,9 @@ const Navbar = () => {
           <CircleHelp className="text-white cursor-pointer" strokeWidth={1} />
         </NavLink>
       </main>
-      <LogOut className="text-white cursor-pointer" size={20} />
+      <NavLink to="/" className={({ isActive }) => (isActive ? "" : "")}>
+        <LogOut className="text-white cursor-pointer" size={20} />
+      </NavLink>
     </nav>
   );
 };

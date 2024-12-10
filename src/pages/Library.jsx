@@ -66,10 +66,12 @@ const Library = () => {
 
   const handleFilter = (value) => {
     const filtered =
-      value == "All"
+      value === "All"
         ? books
         : books.filter(
-            (book) => book.category.toLowerCase() == value.toLowerCase()
+            (book) =>
+              book.category &&
+              book.category.toLowerCase() === value.toLowerCase()
           );
     setFilters((filters) =>
       filters.map((filter) => ({
@@ -79,13 +81,13 @@ const Library = () => {
     );
     setFilteredBooks(filtered);
   };
-
   const handleSearch = (word) => {
     if (!word) {
       setFilteredBooks(books);
     } else {
-      const filtered = books.filter((book) =>
-        book.title.toLowerCase().includes(word.toLowerCase())
+      const filtered = books.filter(
+        (book) =>
+          book.title && book.title.toLowerCase().includes(word.toLowerCase())
       );
       setFilteredBooks(filtered);
     }
@@ -113,7 +115,7 @@ const Library = () => {
             </div>
           ) : (
             <>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 {filters.map((filter) => (
                   <Filter
                     key={filter.id}
@@ -124,7 +126,7 @@ const Library = () => {
               </div>
               {filteredBooks.length > 0 ? (
                 <div
-                  className={`grid ${
+                  className={`grid mt-3 ${
                     activeBook !== null ? "grid-cols-4" : "grid-cols-5"
                   } gap-7`}
                 >

@@ -35,7 +35,6 @@ const Detail = ({ data }) => {
       console.log(response);
       if (response.ok) {
         toast.success("Book deleted successfully");
-        alert(data);
         navigate("/");
       } else {
         toast.error("Failed to delete books");
@@ -59,7 +58,7 @@ const Detail = ({ data }) => {
 
       if (response.ok) {
         toast.success("Book updated successfully");
-        navigate("/books");
+        navigate("/");
       } else {
         toast.error("Failed to update book");
       }
@@ -69,11 +68,11 @@ const Detail = ({ data }) => {
   };
 
   return (
-    <div className="w-1/2 bg-main flex flex-col justify-center items-center gap-7">
+    <div className="w-1/2 bg-main flex flex-col justify-center items-center gap-7 p-10">
       <h1 className="font-semibold text-3xl text-white">Manage Book</h1>
-      <div className="flex flex-col items-center gap-7">
+      <div className="flex flex-col items-center gap-7 w-full">
         <img src={book.image} alt={book.title} className="rounded-xl" />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 bg-blue w-full">
           <p className="font-semibold">Change Image</p>
           <input
             type="text"
@@ -83,7 +82,7 @@ const Detail = ({ data }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <p className="font-semibold">Title</p>
           <input
             type="text"
@@ -94,7 +93,7 @@ const Detail = ({ data }) => {
             required
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <p className="font-semibold">Author : </p>
           <input
             type="text"
@@ -105,7 +104,7 @@ const Detail = ({ data }) => {
             onChange={handleChange}
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <p className="font-semibold">Progress : </p>
           <input
             type="number"
@@ -116,7 +115,7 @@ const Detail = ({ data }) => {
             onChange={handleChange}
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <p className="font-semibold">Category : </p>
           <select
             name="category"
@@ -132,7 +131,7 @@ const Detail = ({ data }) => {
             <option value="History">History</option>
           </select>
         </div>
-        <div className="flex justify-center items-center gap-5">
+        <div className="flex justify-center items-center gap-5 w-full">
           <button
             onClick={() => handleDelete(book.id)}
             className="bg-red-600 font-semibold text-white py-2 px-6 rounded-lg"
